@@ -1,0 +1,25 @@
+{
+  "name": "pulse-observability",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A local-first uptime monitor with safe HTTP checks, incident timelines and a public status view.",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "dev": "node src/server.ts --open",
+    "start": "node dist/server/server.js --open",
+    "build": "tsc && node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test --test-concurrency=1 test/*.test.ts",
+    "test:browser": "node --test --test-concurrency=1 test/browser.test.mjs",
+    "build:pages": "node scripts/build-pages.mjs",
+    "test:pages": "npm run build:pages && node --test --test-concurrency=1 test/pages.test.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "playwright": "^1.65.0",
+    "typescript": "^7.0.2"
+  }
+}

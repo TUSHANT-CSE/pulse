@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#08090b">
+  <meta name="description" content="Pulse Signal Studio — local-first uptime monitoring, real HTTP checks and incident history in a living 3D interface.">
+  <title>Pulse · Signal Studio</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%230d1923'/%3E%3Cpath d='M6 21h8l4-11 5 21 4-10h7' fill='none' stroke='%236ce7c3' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/css/style.css">
+  <script type="module" src="/js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <svg class="svg-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="icon-pulse" viewBox="0 0 24 24"><path d="M2 12h5l3-8 4 16 3-8h5"/></symbol>
+    <symbol id="icon-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="icon-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4m-5-11h3l2-3 2 6 2-3h2"/></symbol>
+    <symbol id="icon-incident" viewBox="0 0 24 24"><path d="m10.3 4-8 14a2 2 0 0 0 1.7 3h16a2 2 0 0 0 1.7-3l-8-14a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/></symbol>
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6 7a8 8 0 0 1 13 1M5 16a8 8 0 0 0 13 1"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="icon-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+    <symbol id="icon-play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8Z"/></symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></symbol>
+    <symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></symbol>
+  </svg>
+
+  <div class="app-shell" id="dashboard-shell">
+    <header class="sidebar" aria-label="Workspace navigation">
+      <a class="brand" href="/" aria-label="Pulse dashboard"><span class="brand-mark"><svg class="icon"><use href="#icon-pulse"/></svg></span><span>pulse<span class="brand-period">.</span></span><span class="brand-edition">SIGNAL STUDIO</span></a>
+      <nav class="primary-nav" aria-label="Main navigation">
+        <a href="#overview" data-nav="overview" class="nav-link active" aria-current="page"><span>Overview</span><span class="nav-indicator"></span></a>
+        <a href="#monitors" data-nav="monitors" class="nav-link"><span>Monitors</span><span class="nav-count" id="nav-monitor-count">—</span></a>
+        <a href="#incidents" data-nav="incidents" class="nav-link"><span>Incidents</span><span class="nav-count" id="nav-incident-count">—</span></a>
+      </nav>
+      <div class="sidebar-bottom"><a href="/status" class="status-page-link"><span>Public status</span><svg class="icon small"><use href="#icon-arrow"/></svg></a><span class="profile-avatar" title="Tushant's local workspace">T</span></div>
+    </header>
+
+    <div class="workspace-main">
+      <header class="topbar">
+        <div class="breadcrumb"><span>Workspace</span><span class="slash">/</span><strong id="breadcrumb-current">Overview</strong></div>
+        <div class="header-controls">
+          <span class="connection" data-connection role="status"><span class="connection-dot"></span><span data-connection-text>Connecting to local server</span></span>
+          <button class="icon-button" type="button" data-retry aria-label="Refresh and retry connection" title="Refresh and retry connection"><svg class="icon"><use href="#icon-refresh"/></svg></button>
+          <div class="mode-control" role="group" aria-label="Monitoring mode"><button type="button" data-mode="demo" aria-pressed="false">Demo</button><button type="button" data-mode="live" aria-pressed="false">Live</button></div>
+        </div>
+      </header>
+
+      <main id="main-content" class="main-content" tabindex="-1">
+        <div class="connection-error" data-load-error role="alert" hidden><svg class="icon"><use href="#icon-incident"/></svg><div><strong>Local server unavailable</strong><p data-load-error-text></p></div><button type="button" class="button secondary" data-retry>Try again</button></div>
+        <section id="overview" class="section-anchor" aria-labelledby="overview-title">
+          <div class="page-heading signal-hero">
+            <div class="hero-copy"><div class="eyebrow hero-eyebrow"><span class="tiny-dot"></span> LOCAL-FIRST OBSERVABILITY <span class="edition-tag">V.01</span></div><h1 id="overview-title">Every signal.<br><span class="refracted-heading">In your orbit.</span></h1><p>Your systems have a pulse. Feel it.<br>Real checks, clear timelines, zero guesswork.</p><div class="hero-actions"><button type="button" class="button primary" data-open-create><svg class="icon"><use href="#icon-plus"/></svg>New monitor<kbd>N</kbd></button><a class="button hero-link" href="#monitors" data-nav="monitors">Explore signals<svg class="icon small"><use href="#icon-arrow"/></svg></a></div><div class="hero-footnote"><span class="mini-cross">+</span> YOUR MACHINE. YOUR DATA. YOUR CONTROL.</div></div>
+            <div class="signal-stage" id="signal-stage"><div class="scene-grid" aria-hidden="true"></div><div class="signal-scene" id="signal-scene" aria-hidden="true"></div><div class="scene-coordinate coordinate-top" aria-hidden="true">PULSE CORE / 001</div><div class="scene-coordinate coordinate-bottom" id="orb-caption">Awaiting measured signals</div><div class="orbit-nodes" id="signal-nodes" aria-label="Quick-select monitors"></div><div class="core-label"><span class="tiny-dot"></span><span id="orbit-health">AWAITING DATA</span></div><button type="button" class="motion-toggle" data-toggle-motion aria-pressed="false" aria-label="Pause visual motion"><svg class="icon"><use href="#icon-pause"/></svg><span data-motion-label>Pause motion</span></button></div>
+          </div>
+          <div class="demo-banner" data-demo-banner hidden><span class="demo-badge">OFFLINE DEMO</span><div><strong>Make a little chaos. Learn a lot.</strong><p>Synthetic services &amp; histories. No real site is affected; HTTP monitors stay paused until you explicitly switch to Live.</p></div><button class="text-button" type="button" data-mode="live">Switch to live<svg class="icon small"><use href="#icon-arrow"/></svg></button></div>
+          <div class="live-banner" data-live-banner hidden><span class="tiny-dot"></span><span><strong>Live monitoring.</strong> Real HTTP checks are active; seeded demo monitors are paused.</span></div>
+          <div class="section-meta"><span><span class="tiny-dot" id="health-dot"></span><span id="health-caption">Waiting for your first signal</span></span><span class="mono" id="updated-at">Awaiting server data</span></div>
+          <div class="metrics" id="summary-metrics" aria-label="Monitoring summary" aria-busy="true">
+            <article class="metric-card"><div class="metric-label">Healthy monitors<svg class="icon"><use href="#icon-monitor"/></svg></div><div class="metric-value">—</div><p>Waiting for local server</p></article>
+            <article class="metric-card"><div class="metric-label">Sampled uptime · 24h<svg class="icon"><use href="#icon-check"/></svg></div><div class="metric-value">—</div><p>Successful sampled checks, not an SLA</p></article>
+            <article class="metric-card"><div class="metric-label">P95 response latency<svg class="icon"><use href="#icon-pulse"/></svg></div><div class="metric-value">—</div><p>Response-header latency · 24h</p></article>
+            <article class="metric-card"><div class="metric-label">Open incidents<svg class="icon"><use href="#icon-incident"/></svg></div><div class="metric-value">—</div><p>Waiting for local server</p></article>
+          </div>
+          <div class="overview-grid">
+            <section class="panel chart-panel" aria-labelledby="latency-title">
+              <div class="panel-heading"><div><div class="eyebrow">PERFORMANCE</div><h2 id="latency-title">Response latency</h2><p id="chart-subtitle">Select a monitor to inspect its checks.</p></div><div class="segmented" role="group" aria-label="Chart time range"><button type="button" data-range="1" aria-pressed="false">1h</button><button type="button" data-range="6" aria-pressed="false">6h</button><button type="button" data-range="24" aria-pressed="true">24h</button></div></div>
+              <div class="chart-legend"><span><i class="legend-line"></i>Header latency</span><span><i class="legend-dot failed"></i>Failed check</span><span class="mono" id="chart-sample-count">— samples</span></div>
+              <div class="main-chart" id="latency-chart"><div class="empty-state loading-state"><span class="loading-ring"></span><p>Connecting the dots…</p></div></div>
+              <div class="availability-section"><div class="availability-heading"><span>Check history</span><span class="mono" id="availability-label">Last 24 hours</span></div><div id="selected-availability" class="availability-wrap"></div><div class="chart-footnote"><span>Earlier</span><span>Each segment is a sampled check, not elapsed uptime.</span><span>Latest</span></div></div>
+            </section>
+            <section class="panel detail-panel" aria-labelledby="detail-title"><div class="panel-heading"><div><div class="eyebrow">SELECTED MONITOR</div><h2 id="detail-title">Monitor details</h2></div><svg class="icon muted"><use href="#icon-monitor"/></svg></div><div id="monitor-detail"><div class="empty-state"><svg class="icon"><use href="#icon-monitor"/></svg><p>Your monitor's story starts here.</p><small>Select a monitor below.</small></div></div></section>
+          </div>
+          <section class="scenario-panel" id="scenario-panel" aria-labelledby="scenario-title" hidden><div><div class="eyebrow">DEMO PLAYGROUND</div><h3 id="scenario-title">See how Pulse responds.</h3><p>Targets the first seeded demo monitor. No real site is affected.</p></div><div class="scenario-actions"><button type="button" class="button secondary" data-scenario="outage"><svg class="icon"><use href="#icon-incident"/></svg>Simulate outage</button><button type="button" class="button secondary" data-scenario="recovery"><svg class="icon"><use href="#icon-check"/></svg>Recover demo</button><button type="button" class="button secondary" data-scenario="latency"><svg class="icon"><use href="#icon-clock"/></svg>Simulate latency</button></div></section>
+        </section>
+
+        <section id="monitors" class="panel monitor-panel section-anchor" aria-labelledby="monitors-title">
+          <div class="panel-heading"><div><div class="eyebrow">YOUR ENDPOINTS</div><h2 id="monitors-title">Monitors <span class="count-label" id="monitor-list-count">—</span></h2></div><label class="search-field"><svg class="icon"><use href="#icon-search"/></svg><input id="monitor-search" type="search" placeholder="Search monitors" aria-label="Search monitors by name or URL" autocomplete="off"><kbd>/</kbd></label></div>
+          <div class="monitor-filter-row"><div class="filters" role="group" aria-label="Filter monitors by status"><button type="button" data-filter="all" aria-pressed="true">All</button><button type="button" data-filter="up" aria-pressed="false">Up</button><button type="button" data-filter="degraded" aria-pressed="false">Degraded</button><button type="button" data-filter="down" aria-pressed="false">Down</button><button type="button" data-filter="paused" aria-pressed="false">Paused</button></div><span class="muted small-text">Select a row to explore</span></div>
+          <div class="monitor-table-labels" aria-hidden="true"><span>Monitor / endpoint</span><span>Status</span><span>Latency</span><span>Uptime · 24h</span><span>Recent checks</span></div>
+          <ul class="monitor-list" id="monitor-list" aria-label="Monitors"><li class="empty-state loading-state"><span class="loading-ring"></span><p>Loading your monitors…</p></li></ul>
+          <div class="panel-footer"><span id="monitor-result-count">Waiting for data</span><span>Uptime = successful sampled checks</span></div>
+        </section>
+
+        <div class="bottom-grid">
+          <section id="incidents" class="panel section-anchor" aria-labelledby="incidents-title"><div class="panel-heading"><div><div class="eyebrow">WHEN THINGS CHANGE</div><h2 id="incidents-title">Incidents <span class="count-label" id="incident-count">—</span></h2></div><svg class="icon muted"><use href="#icon-incident"/></svg></div><div id="incident-list" class="incident-list"><div class="empty-state"><p>Waiting for incident history.</p></div></div></section>
+          <section class="panel" id="activity" aria-labelledby="activity-title"><div class="panel-heading"><div><div class="eyebrow">THE LATEST SIGNALS</div><h2 id="activity-title">Activity</h2></div><span class="live-tag"><span class="tiny-dot"></span>EVENT STREAM</span></div><ol id="activity-list" class="activity-list"><li class="empty-state"><p>Waiting for recent events.</p></li></ol></section>
+        </div>
+        <footer class="page-footer"><span class="footer-brand">pulse.</span><span>Small signals. Full picture.</span><a href="/status">View public status<svg class="icon small"><use href="#icon-arrow"/></svg></a></footer>
+      </main>
+    </div>
+  </div>
+
+  <div id="public-shell" class="public-shell">
+    <header class="public-topbar"><a class="brand" href="/status"><span class="brand-mark"><svg class="icon"><use href="#icon-pulse"/></svg></span><span>pulse<span class="brand-period">.</span></span></a><div class="header-controls"><span class="connection" data-connection role="status"><span class="connection-dot"></span><span data-connection-text>Connecting to local server</span></span><button class="icon-button" data-retry type="button" aria-label="Refresh and retry connection"><svg class="icon"><use href="#icon-refresh"/></svg></button><a href="/" class="button secondary">Dashboard<svg class="icon small"><use href="#icon-arrow"/></svg></a></div></header>
+    <main class="public-main" id="public-main" tabindex="-1">
+      <div class="connection-error" data-load-error role="alert" hidden><svg class="icon"><use href="#icon-incident"/></svg><div><strong>Status service unavailable</strong><p data-load-error-text></p></div><button type="button" class="button secondary" data-retry>Try again</button></div>
+      <div class="public-intro"><div class="public-intro-copy"><div class="eyebrow"><span class="tiny-dot"></span> OPEN SIGNALS. NOTHING TO HIDE.</div><h1 id="public-name">System status<span class="heading-dot">.</span></h1><p>A window into the things you depend on.</p></div><div class="public-sculpture"><div class="signal-scene" id="public-scene" aria-hidden="true"></div><button type="button" class="motion-toggle" data-toggle-motion aria-pressed="false" aria-label="Pause visual motion"><svg class="icon"><use href="#icon-pause"/></svg><span data-motion-label>Pause motion</span></button></div></div>
+      <div class="demo-banner" data-demo-banner hidden><span class="demo-badge">OFFLINE DEMO</span><div><strong>This is a demonstration, not a real service status report.</strong><p>Component histories and uptime are synthetic seeded data. No real sites are affected.</p></div></div>
+      <section id="public-overall" class="public-overall panel" aria-label="Overall system status"><span class="overall-symbol"><svg class="icon"><use href="#icon-pulse"/></svg></span><div><div class="eyebrow">CURRENT STATUS</div><h2>Connecting to status service</h2><p>Waiting for sampled check data.</p></div></section>
+      <div class="public-section-heading"><h2>Components</h2><span id="public-updated-at" class="mono muted">Awaiting server data</span></div>
+      <div id="public-components" class="public-components"><div class="panel empty-state loading-state"><span class="loading-ring"></span><p>Loading components…</p></div></div>
+      <p class="public-methodology">Uptime is the percentage of successful sampled checks over 24 hours, not a contractual SLA. History segments represent checks, not continuous time; response latency measures receipt of HTTP headers.</p>
+      <div class="bottom-grid"><section class="panel" aria-labelledby="public-incidents-title"><div class="panel-heading"><div><div class="eyebrow">SERVICE HISTORY</div><h2 id="public-incidents-title">Incidents</h2></div><svg class="icon muted"><use href="#icon-incident"/></svg></div><div id="public-incidents" class="incident-list"><div class="empty-state"><p>Waiting for incident history.</p></div></div></section><section class="panel" aria-labelledby="public-timeline-title"><div class="panel-heading"><div><div class="eyebrow">LATEST UPDATES</div><h2 id="public-timeline-title">Timeline</h2></div><svg class="icon muted"><use href="#icon-clock"/></svg></div><ol id="public-timeline" class="activity-list"><li class="empty-state"><p>Waiting for timeline.</p></li></ol></section></div>
+      <footer class="page-footer"><span class="footer-brand">pulse.</span><span>Public, read-only status.</span><a href="/">Back to dashboard<svg class="icon small"><use href="#icon-arrow"/></svg></a></footer>
+    </main>
+  </div>
+
+  <dialog id="create-dialog" aria-labelledby="create-title" aria-describedby="create-description">
+    <form id="create-form">
+      <div class="dialog-heading"><span class="dialog-icon"><svg class="icon"><use href="#icon-monitor"/></svg></span><button class="icon-button" type="button" data-close-dialog="create-dialog" aria-label="Close new monitor dialog"><svg class="icon"><use href="#icon-close"/></svg></button></div>
+      <div class="eyebrow">A NEW SIGNAL</div><h2 id="create-title">Create a monitor</h2><p id="create-description" class="dialog-description">Monitor a public HTTP or HTTPS endpoint. Local, private, and reserved network addresses are not allowed.</p>
+      <div id="create-demo-note" class="form-notice" hidden><strong>You're in Demo mode.</strong><p>This real HTTP monitor will remain paused in Demo. Creating it never changes your mode.</p><button type="button" class="text-button" id="create-switch-live">Explicitly switch to Live</button></div>
+      <div class="form-fields"><label for="monitor-name">Monitor name</label><input id="monitor-name" name="name" required maxlength="80" placeholder="Production API" autocomplete="off"><label for="monitor-url">Endpoint URL</label><input id="monitor-url" name="url" type="url" required maxlength="2048" placeholder="https://example.com/health" autocomplete="url"><div class="form-grid"><div><label for="monitor-interval">Check interval <span>(seconds)</span></label><input id="monitor-interval" name="intervalSeconds" type="number" min="15" max="3600" step="1" value="60" required><small>15–3,600 seconds</small></div><div><label for="monitor-timeout">Timeout <span>(ms)</span></label><input id="monitor-timeout" name="timeoutMs" type="number" min="1000" max="15000" step="1" value="5000" required><small>1,000–15,000 ms</small></div></div><label for="monitor-threshold">Slow response threshold <span>(ms)</span></label><input id="monitor-threshold" name="slowThresholdMs" type="number" min="100" max="10000" step="1" value="1000" required><small>100–10,000 ms. Slow successful checks are marked degraded.</small></div>
+      <p id="create-error" class="form-error" role="alert" hidden></p><div class="dialog-actions"><button class="button secondary" type="button" data-close-dialog="create-dialog">Cancel</button><button class="button primary" type="submit" id="create-submit"><svg class="icon"><use href="#icon-plus"/></svg>Create monitor</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="delete-dialog" aria-labelledby="delete-title" aria-describedby="delete-description"><form id="delete-form"><div class="dialog-heading"><span class="dialog-icon danger"><svg class="icon"><use href="#icon-trash"/></svg></span><button class="icon-button" type="button" data-close-dialog="delete-dialog" aria-label="Close delete confirmation"><svg class="icon"><use href="#icon-close"/></svg></button></div><div class="eyebrow">PERMANENT ACTION</div><h2 id="delete-title">Delete this monitor?</h2><p id="delete-description" class="dialog-description">This removes <strong id="delete-monitor-name"></strong> and its saved check history. This action cannot be undone.</p><p id="delete-error" class="form-error" role="alert" hidden></p><div class="dialog-actions"><button class="button secondary" type="button" data-close-dialog="delete-dialog">Keep monitor</button><button class="button danger-button" type="submit" id="delete-submit">Delete monitor</button></div></form></dialog>
+
+  <dialog id="mode-dialog" aria-labelledby="mode-title" aria-describedby="mode-description"><div class="dialog-heading"><span class="dialog-icon"><svg class="icon"><use href="#icon-globe"/></svg></span><button class="icon-button" type="button" data-close-dialog="mode-dialog" aria-label="Close mode confirmation"><svg class="icon"><use href="#icon-close"/></svg></button></div><div class="eyebrow">MONITORING MODE</div><h2 id="mode-title">Switch monitoring mode?</h2><p id="mode-description" class="dialog-description"></p><p id="mode-error" class="form-error" role="alert" hidden></p><div class="dialog-actions"><button class="button secondary" type="button" data-close-dialog="mode-dialog">Cancel</button><button class="button primary" type="button" id="mode-confirm">Confirm switch</button></div></dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+  <div class="sr-only" id="announcement" role="status" aria-live="polite" aria-atomic="true"></div>
+  <noscript><div class="noscript-notice">Pulse needs JavaScript to display local monitoring data. Enable JavaScript and reload. No remote scripts are used.</div></noscript>
+</body>
+</html>
